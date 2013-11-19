@@ -1,4 +1,4 @@
-package kindr;
+package test;
 
 import java.io.PrintWriter;
 import java.net.Socket;
