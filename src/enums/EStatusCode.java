@@ -79,7 +79,7 @@ public enum EStatusCode {
 	 * @param code
 	 * @return
 	 */
-	public static EStatusCode findByCode(int code) {
+	public static EStatusCode find(int code) {
 		for(EStatusCode item : values()) {
 			if(item.getCode() == code) {
 				return item;
@@ -94,7 +94,7 @@ public enum EStatusCode {
 	 * @param desc
 	 * @return
 	 */
-	public static EStatusCode findByDescription(String desc) {
+	public static EStatusCode find(String desc) {
 		if(desc != null && ! desc.isEmpty()) {
 			for(EStatusCode item : values()) {
 				if(item.getDescription().equals(desc)) {
