@@ -6,4 +6,21 @@ package enums;
  */
 public enum EMethod {
 	GET, HEAD; // TODO: add the other methods
+	
+	/**
+	 * Find method given a string value
+	 * @param method
+	 * @return
+	 */
+	public static EMethod find(String method) {
+		if(method != null && ! method.isEmpty()) {
+			for(EMethod m : values()) {
+				if(m.name().equals(method)) {
+					return  m;
+				}
+			}
+		}
+		
+		return null;
+	}
 }
