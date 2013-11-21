@@ -10,7 +10,7 @@ public enum EStatusCode {
 	C_100(100, "Continue"),
 	C_101(101, "Switching Protocols"),
 	
-	// Sucess
+	// Success
 	C_200(200, "OK"),
 	C_201(201, "Created"),
 	C_202(202, "Accepted"),
