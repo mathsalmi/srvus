@@ -9,7 +9,6 @@ import enums.EStatusCode;
 public class StatusLine {
 	private String httpVersion;
 	private EStatusCode statusCode;
-	private String reasonPhrase;
 	
 	/**
 	 * @return the httpVersion
@@ -34,17 +33,5 @@ public class StatusLine {
 	 */
 	public void setStatusCode(EStatusCode statusCode) {
 		this.statusCode = statusCode;
-	}
-	/**
-	 * @return the reasonPhrase
-	 */
-	public String getReasonPhrase() {
-		return reasonPhrase;
-	}
-	/**
-	 * @param reasonPhrase the reasonPhrase to set
-	 */
-	public void setReasonPhrase(String reasonPhrase) {
-		this.reasonPhrase = reasonPhrase;
 	}
 }
