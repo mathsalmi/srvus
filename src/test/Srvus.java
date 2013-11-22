@@ -5,7 +5,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Date;
 
-import util.Request;
+import messages.Request;
 
 public class Srvus implements Runnable {
 	Socket so = null;

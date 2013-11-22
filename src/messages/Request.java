@@ -1,10 +1,12 @@
-package util;
+package messages;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import util.HttpUtil;
+import util.IntegerUtil;
 import entities.RequestFields;
 import entities.RequestLine;
 import enums.EMethod;
