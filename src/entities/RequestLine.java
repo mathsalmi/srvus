@@ -38,18 +38,6 @@ public class RequestLine {
 		this.requestUri = requestUri;
 	}
 	/**
-	 * @return the uri
-	 */
-	public String getUri() {
-		return requestUri;
-	}
-	/**
-	 * @param uri the uri to set
-	 */
-	public void setUri(String uri) {
-		this.requestUri = uri;
-	}
-	/**
 	 * @return the httpVersion
 	 */
 	public String getHttpVersion() {
