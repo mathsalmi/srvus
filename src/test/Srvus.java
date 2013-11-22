@@ -29,21 +29,26 @@ public class Srvus implements Runnable {
 			// If not, we can simply stop at an empty line. 
 			// TODO: think how to return 400 if there is a message body when content-length wasn't sent. IDEA: perhaps a timeout?
 			// check http://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.4
-			while((inputLine = in.readLine()) != null && ! inputLine.isEmpty()) {
+			/*while((inputLine = in.readLine()) != null && ! inputLine.isEmpty()) {
 				System.out.println(inputLine);
-		    }
+		    }*/
+			char[] c = new char[10000000];
+			while(in.read(c, 0, 10000000) != -1) {
+				System.out.println(c);
+			}
+			/*System.out.println("-----");
 			
 			// send response
 			PrintWriter out = new PrintWriter(so.getOutputStream());
 			out.write("HTTP/1.1 200 OK\r\n");
 	        out.write("Content-Type: text/html\r\n\r\n");
-	        out.write("<!DOCTYPE html><html><body><h1>Hello world<form method=\"post\"><input type=\"text\" name=\"hello\"><input type=\"submit\"></form></h1></body></html>");
+	        out.write(Content.get());
 			out.flush();
 			
 			// close input and output
 			in.close();
 			out.close();
-			so.close();
+			so.close();*/
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
