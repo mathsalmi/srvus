@@ -20,4 +20,9 @@ public class HttpException extends RuntimeException {
 	public EStatusCode getStatusCode() {
 		return statusCode;
 	}
+	
+	@Override
+	public String toString() {
+		return statusCode.getCode() + " " + statusCode.getDescription();
+	}
 }
