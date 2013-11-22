@@ -18,19 +18,16 @@ public abstract class HeaderFields extends HashMap<String, String> {
 	 * @return
 	 */
 	public String get(String key) {
-		String out = null;
-		
 		Set<String> keys = keySet();
 		if(keys != null) {
 			for(String item : keys) {
 				if(item.equalsIgnoreCase(key)) {
-					out = super.get(item);
-					break;
+					return super.get(item);
 				}
 			}
 		}
 		
-		return out;
+		return null;
     }
 	
 	@Override
