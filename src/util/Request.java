@@ -4,8 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
 
 import entities.RequestFields;
 import entities.RequestLine;
@@ -21,13 +19,14 @@ public class Request {
 	private InputStream inputstream = null;
 	private RequestLine requestLine = null;
 	private RequestFields requestFields = null;
-	private String body = "";
+	private String body = null;
 	
 	private Request() {
 		this.requestFields = new RequestFields();
 	}
 	
 	public Request(InputStream inputstream) {
+		this();
 		this.inputstream = inputstream;
 	}
 	
@@ -35,15 +34,22 @@ public class Request {
 	 * Processes the request
 	 * @throws IOException 
 	 */
-	public void process() throws HttpException, IOException {
-		this.processHeader();
-		this.processBody();
+	public void process() throws HttpException {
+		BufferedReader in = new BufferedReader(new InputStreamReader(inputstream));
+		try {
+			this.processHeader(in);
+			this.processBody(in);
+		} catch (IOException e) {
+		}
 	}
 	
-	
-	private void processHeader() throws HttpException, IOException {
-		BufferedReader in = new BufferedReader(new InputStreamReader(inputstream));
-		
+	/**
+	 * Processes the input stream in order to get the start-line and the header fields
+	 * @param in the input stream converted into BufferedReader
+	 * @throws HttpException
+	 * @throws IOException
+	 */
+	private void processHeader(BufferedReader in) throws HttpException, IOException {
 		String line;
 		while((line = in.readLine()) != null && ! line.isEmpty()) {
 			if(line.indexOf(':') == -1) {
@@ -59,31 +65,34 @@ public class Request {
 	    }
 	}
 	
-	private void processBody() throws IOException {
-		BufferedReader in = new BufferedReader(new InputStreamReader(inputstream));
+	/**
+	 * Processes the input stream in order to get the message body
+	 * @param in the input stream converted into BufferedReader
+	 * @throws HttpException
+	 * @throws IOException
+	 */
+	private void processBody(BufferedReader in) throws IOException {
+		int contentLength = IntegerUtil.tryParse(this.requestFields.get("Content-Length"));
 		
-		try {
-			// parses message body
-			int contentLength = 0;
-			String objContentLength = this.requestFields.get("Content-Length");
-			if(objContentLength != null) {
-				contentLength = Integer.parseInt(objContentLength);
-			}
-			
-			StringBuilder body = new StringBuilder();
-			if(contentLength > 0) {
-	            int read;
-	            while((read = in.read()) != -1) {
-	                body.append((char) read);
-	                if (body.length() == contentLength)
-	                    break;
-	            }
-	        }
-			
-			this.body = body.toString();
-		} catch(NumberFormatException e) { } // TODO: write an IntegerUtil.tryparse
+		StringBuilder body = new StringBuilder();
+		if(contentLength > 0) {
+            int read;
+            while((read = in.read()) != -1) {
+                body.append((char) read);
+                if (body.length() == contentLength)
+                    break;
+            }
+        }
+		
+		this.body = body.toString();
 	}
 	
+	/**
+	 * Parses an line according to the request-line rules.
+	 * @param line the line to be parsed
+	 * @return
+	 * @throws HttpException
+	 */
 	private RequestLine parseRequestLine(String line) throws HttpException {
 		if(line != null && ! line.isEmpty()) {
 			String[] tokens = line.split(" ");
@@ -114,5 +123,26 @@ public class Request {
 		}
 		
 		return null;
+	}
+
+	/**
+	 * @return the requestLine
+	 */
+	public RequestLine getRequestLine() {
+		return requestLine;
+	}
+
+	/**
+	 * @return the requestFields
+	 */
+	public RequestFields getRequestFields() {
+		return requestFields;
+	}
+
+	/**
+	 * @return the body
+	 */
+	public String getBody() {
+		return body;
 	}
 }

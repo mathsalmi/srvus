@@ -5,6 +5,7 @@ package util;
  * @author Matheus Salmi
  */
 public class HttpUtil {
+	private static final String VERSION = "HTTP/1.1";
 	
 	/**
 	 * Checks whether or not a HTTP version is supported
@@ -12,6 +13,14 @@ public class HttpUtil {
 	 * @return
 	 */
 	public static boolean isSupported(String version) {
-		return version != null && version.equals("HTTP/1.1");
+		return version != null && version.equals(currentVersion());
+	}
+	
+	/**
+	 * Returns the version of this HTTP Server
+	 * @return
+	 */
+	public static String currentVersion() {
+		return VERSION;
 	}
 }
