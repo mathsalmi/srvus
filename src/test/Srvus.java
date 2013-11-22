@@ -1,10 +1,13 @@
 package test;
 
 import java.io.BufferedReader;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Srvus implements Runnable {
 	Socket so = null;
@@ -22,21 +25,49 @@ public class Srvus implements Runnable {
 			System.out.println(new Date());
 			System.out.println("-----");
 			
-			BufferedReader in = new BufferedReader(new InputStreamReader(so.getInputStream()));
-			String inputLine;
+			InputStream inputstream = so.getInputStream();
+			BufferedReader in = new BufferedReader(new InputStreamReader(inputstream));
+			
 			// it should test whether there is the "Content-length" field. 
 			// If there is, then there is a message body, so we must read until its end;
 			// If not, we can simply stop at an empty line. 
 			// TODO: think how to return 400 if there is a message body when content-length wasn't sent. IDEA: perhaps a timeout?
 			// check http://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.4
-			/*while((inputLine = in.readLine()) != null && ! inputLine.isEmpty()) {
-				System.out.println(inputLine);
-		    }*/
-			char[] c = new char[10000000];
-			while(in.read(c, 0, 10000000) != -1) {
-				System.out.println(c);
+			List<String> header = new ArrayList<>();
+			String line;
+			int length = 0;
+			while((line = in.readLine()) != null) {
+				if(line.isEmpty()) {
+					break;
+				}
+				
+				if(line.startsWith("Content-Length: ")) {
+					int index = line.indexOf(':') + 1;
+                    String len = line.substring(index).trim();
+                    length = Integer.parseInt(len);
+				}
+				
+				header.add(line);
+		    }
+			
+			StringBuilder body = new StringBuilder();
+			if (length > 0) {
+                int read;
+                while ((read = in.read()) != -1) {
+                    body.append((char) read);
+                    if (body.length() == length)
+                        break;
+                }
+            }
+			
+			System.out.println("header");
+			for(String field : header) {
+				System.out.println(field);
 			}
-			/*System.out.println("-----");
+			
+			System.out.println("body");
+			System.out.println(body.toString());
+			System.out.println("-----");
 			
 			// send response
 			PrintWriter out = new PrintWriter(so.getOutputStream());
@@ -48,7 +79,7 @@ public class Srvus implements Runnable {
 			// close input and output
 			in.close();
 			out.close();
-			so.close();*/
+			so.close();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
