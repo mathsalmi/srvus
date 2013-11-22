@@ -34,4 +34,9 @@ public class StatusLine {
 	public void setStatusCode(EStatusCode statusCode) {
 		this.statusCode = statusCode;
 	}
+	
+	@Override
+	public String toString() {
+		return httpVersion + " " + statusCode.getCode() + " " + statusCode.getDescription(); 
+	}
 }
