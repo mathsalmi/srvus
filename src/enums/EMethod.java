@@ -5,7 +5,7 @@ package enums;
  * @author Matheus Salmi
  */
 public enum EMethod {
-	GET, HEAD; // TODO: add the other methods
+	GET, HEAD, POST; // TODO: add the other methods
 	
 	/**
 	 * Find method given a string value
