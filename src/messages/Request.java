@@ -22,6 +22,7 @@ public class Request {
 	private RequestLine requestLine = null;
 	private RequestFields requestFields = null;
 	private String body = null;
+	private boolean processed = false;
 	
 	private Request() {
 		this.requestFields = new RequestFields();
@@ -41,7 +42,9 @@ public class Request {
 		try {
 			this.processHeader(in);
 			this.processBody(in);
+			this.processed = true;
 		} catch (IOException e) {
+			this.processed = false;
 		}
 	}
 	
@@ -96,41 +99,43 @@ public class Request {
 	 * @throws HttpException
 	 */
 	private RequestLine parseRequestLine(String line) throws HttpException {
-		if(line != null && ! line.isEmpty()) {
-			String[] tokens = line.split(" ");
-			
-			// check tokens
-			if(tokens.length <= 0) {
-				throw new HttpException(EStatusCode.C_400);
-			}
-			
-			// check method
-			EMethod method = EMethod.find(tokens[0]);
-			if(method == null) {
-				throw new HttpException(EStatusCode.C_501);
-			}
-			
-			// check HTTP version
-			String httpVersion = tokens[2];
-			if( ! HttpUtil.isSupported(httpVersion)) {
-				throw new HttpException(EStatusCode.C_505);
-			}
-			
-			RequestLine output = new RequestLine();
-			output.setMethod(method);
-			output.setRequestUri(tokens[1]); // TODO: validate request uri
-			output.setHttpVersion(httpVersion);
-			
-			return output;
+		// if cant process, then bad request
+		if(line == null || line.isEmpty()) {
+			throw new HttpException(EStatusCode.C_400);
 		}
 		
-		return null;
+		String[] tokens = line.split(" ");
+		
+		// check tokens
+		if(tokens.length <= 0) {
+			throw new HttpException(EStatusCode.C_400);
+		}
+		
+		// check method
+		EMethod method = EMethod.find(tokens[0]);
+		if(method == null) {
+			throw new HttpException(EStatusCode.C_501);
+		}
+		
+		// check HTTP version
+		String httpVersion = tokens[2];
+		if( ! HttpUtil.isSupported(httpVersion)) {
+			throw new HttpException(EStatusCode.C_505);
+		}
+		
+		RequestLine output = new RequestLine();
+		output.setMethod(method);
+		output.setRequestUri(tokens[1]); // TODO: validate request uri
+		output.setHttpVersion(httpVersion);
+		
+		return output;
 	}
 
 	/**
 	 * @return the requestLine
 	 */
 	public RequestLine getRequestLine() {
+		checkProcessed();
 		return requestLine;
 	}
 
@@ -138,6 +143,7 @@ public class Request {
 	 * @return the requestFields
 	 */
 	public RequestFields getRequestFields() {
+		checkProcessed();
 		return requestFields;
 	}
 
@@ -145,6 +151,16 @@ public class Request {
 	 * @return the body
 	 */
 	public String getBody() {
+		checkProcessed();
 		return body;
+	}
+	
+	/**
+	 * Checks whether or not the request was processed
+	 * @return
+	 */
+	private void checkProcessed() {
+		if( ! this.processed)
+			throw new IllegalStateException("Request not processed.");
 	}
 }
