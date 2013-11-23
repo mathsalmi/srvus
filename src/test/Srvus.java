@@ -6,6 +6,8 @@ import java.net.Socket;
 import java.util.Date;
 
 import messages.Request;
+import enums.EStatusCode;
+import exception.HttpException;
 
 public class Srvus implements Runnable {
 	Socket so = null;
@@ -40,6 +42,26 @@ public class Srvus implements Runnable {
 			out.flush();
 			
 			// close input and output
+			out.close();
+			so.close();
+		} catch(HttpException e) {
+			this.respondWithError(e);
+		} catch(Exception e) {
+			e.printStackTrace();
+			this.respondWithError(new HttpException(EStatusCode.C_500));
+		}
+	}
+	
+	// TODO: delete it
+	private void respondWithError(HttpException httpexc) {
+		try {
+			PrintWriter out = new PrintWriter(so.getOutputStream());
+			out.write("HTTP/1.1 " + httpexc.toString() + " \r\n");
+			out.write("Content-Type: text/html\r\n\r\n");
+			out.write("<h1>" + httpexc.toString() + "</h1>");
+			out.flush();
+			
+			// close
 			out.close();
 			so.close();
 		} catch(Exception e) {
