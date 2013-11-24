@@ -11,7 +11,7 @@ public class Test {
 		
 		try {
 			ss = new ServerSocket(8885);
-			
+			System.out.println(System.getProperty("user.dir"));
 			while(true) {
 				Socket so = ss.accept();
 				
