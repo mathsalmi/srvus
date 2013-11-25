@@ -6,6 +6,7 @@ import java.net.Socket;
 import java.util.Date;
 
 import messages.Request;
+import messages.Response;
 import enums.EStatusCode;
 import exception.HttpException;
 
