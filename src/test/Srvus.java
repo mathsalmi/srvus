@@ -27,7 +27,6 @@ public class Srvus implements Runnable {
 			
 			InputStream inputstream = so.getInputStream();
 			Request req = new Request(inputstream);
-			req.process();
 			System.out.println(req.getRequestLine()); // start line
 			System.out.println(req.getRequestFields()); // header
 			System.out.println("-----");

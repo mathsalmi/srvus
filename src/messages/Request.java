@@ -23,30 +23,27 @@ public class Request {
 	private RequestLine requestLine = null;
 	private RequestFields requestFields = null;
 	private String body = null;
-	private boolean processed = false;
 	
 	private Request() {
 		this.requestFields = new RequestFields();
 	}
 	
-	public Request(InputStream inputstream) {
+	public Request(InputStream inputstream) throws HttpException {
 		this();
 		this.inputstream = inputstream;
+		this.process();
 	}
 	
 	/**
 	 * Processes the request
 	 * @throws IOException 
 	 */
-	public void process() throws HttpException {
+	private void process() throws HttpException {
 		BufferedReader in = new BufferedReader(new InputStreamReader(inputstream));
 		try {
 			this.processHeader(in);
 			this.processBody(in);
-			this.processed = true;
-		} catch (IOException e) {
-			this.processed = false;
-		}
+		} catch (IOException e) { }
 	}
 	
 	/**
@@ -144,7 +141,6 @@ public class Request {
 	 * @return the requestLine
 	 */
 	public RequestLine getRequestLine() {
-		checkProcessed();
 		return requestLine;
 	}
 
@@ -152,7 +148,6 @@ public class Request {
 	 * @return the requestFields
 	 */
 	public RequestFields getRequestFields() {
-		checkProcessed();
 		return requestFields;
 	}
 
@@ -160,16 +155,6 @@ public class Request {
 	 * @return the body
 	 */
 	public String getBody() {
-		checkProcessed();
 		return body;
-	}
-	
-	/**
-	 * Checks whether or not the request was processed
-	 * @return
-	 */
-	private void checkProcessed() {
-		if( ! this.processed)
-			throw new IllegalStateException("Request not processed.");
 	}
 }
