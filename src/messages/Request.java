@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URI;
 
 import util.HttpUtil;
 import util.IntegerUtil;
@@ -117,6 +118,14 @@ public class Request {
 			throw new HttpException(EStatusCode.C_501);
 		}
 		
+		// check URI
+		URI uri = null;
+		try {
+			uri = new URI(tokens[1]);
+		} catch(Exception e) {
+			throw new HttpException(EStatusCode.C_400);
+		}
+		
 		// check HTTP version
 		String httpVersion = tokens[2];
 		if( ! HttpUtil.isSupported(httpVersion)) {
@@ -125,7 +134,7 @@ public class Request {
 		
 		RequestLine output = new RequestLine();
 		output.setMethod(method);
-		output.setRequestUri(tokens[1]); // TODO: validate request uri
+		output.setRequestUri(uri);
 		output.setHttpVersion(httpVersion);
 		
 		return output;
