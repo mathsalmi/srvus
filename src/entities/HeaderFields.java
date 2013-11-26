@@ -63,6 +63,22 @@ public abstract class HeaderFields {
 	}
 	
 	/**
+	 * Returns true if it contains no fields
+	 * @return
+	 */
+	public boolean isEmpty() {
+		return data.isEmpty();
+	}
+	
+	/**
+	 * Returns the number of fields added
+	 * @return
+	 */
+	public int size() {
+		return data.size();
+	}
+	
+	/**
 	 * Converts to a map structure
 	 * @return
 	 */
