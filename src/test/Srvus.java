@@ -27,8 +27,8 @@ public class Srvus implements Runnable {
 			
 			InputStream inputstream = so.getInputStream();
 			Request req = new Request(inputstream);
-			System.out.println(req.getRequestLine()); // start line
-			System.out.println(req.getRequestFields()); // header
+			System.out.print(req.getRequestLine()); // start line
+			System.out.print(req.getRequestFields()); // header
 			System.out.println("-----");
 			System.out.println(req.getBody()); // message body
 			System.out.println("-----");
@@ -36,7 +36,7 @@ public class Srvus implements Runnable {
 			
 			// send response
 			Response out = new Response(so.getOutputStream());
-			out.setStatusLine(EStatusCode.C_200);
+			out.setStatusCode(EStatusCode.C_200);
 			out.addHeaderField("Content-type", "text/html");
 			out.setBody(Content.get());
 			out.send();
@@ -55,7 +55,7 @@ public class Srvus implements Runnable {
 	private void respondWithError(HttpException httpexc) {
 		try {
 			Response out = new Response(so.getOutputStream());
-			out.setStatusLine(httpexc.getStatusCode());
+			out.setStatusCode(httpexc.getStatusCode());
 			out.addHeaderField("Content-type", "text/html");
 			out.setBody("<h1>" + httpexc.toString() + "</h1>");
 			out.send();
