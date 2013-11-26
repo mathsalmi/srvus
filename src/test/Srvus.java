@@ -1,7 +1,6 @@
 package test;
 
 import java.io.InputStream;
-import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Date;
 
@@ -34,15 +33,15 @@ public class Srvus implements Runnable {
 			System.out.println(req.getBody()); // message body
 			System.out.println("-----");
 			
+			
 			// send response
-			PrintWriter out = new PrintWriter(so.getOutputStream());
-			out.write("HTTP/1.1 200 OK\r\n");
-	        out.write("Content-Type: text/html\r\n\r\n");
-	        out.write(Content.get());
-			out.flush();
+			Response out = new Response(so.getOutputStream());
+			out.setStatusLine(EStatusCode.C_200);
+			out.addHeaderField("Content-type", "text/html");
+			out.setBody(Content.get());
+			out.send();
 			
 			// close input and output
-			out.close();
 			so.close();
 		} catch(HttpException e) {
 			this.respondWithError(e);
@@ -55,14 +54,13 @@ public class Srvus implements Runnable {
 	// TODO: delete it
 	private void respondWithError(HttpException httpexc) {
 		try {
-			PrintWriter out = new PrintWriter(so.getOutputStream());
-			out.write("HTTP/1.1 " + httpexc.toString() + " \r\n");
-			out.write("Content-Type: text/html\r\n\r\n");
-			out.write("<h1>" + httpexc.toString() + "</h1>");
-			out.flush();
+			Response out = new Response(so.getOutputStream());
+			out.setStatusLine(httpexc.getStatusCode());
+			out.addHeaderField("Content-type", "text/html");
+			out.setBody("<h1>" + httpexc.toString() + "</h1>");
+			out.send();
 			
 			// close
-			out.close();
 			so.close();
 		} catch(Exception e) {
 			e.printStackTrace();
