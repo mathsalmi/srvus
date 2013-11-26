@@ -55,9 +55,13 @@ public class RequestLine {
 	public void setHttpVersion(String httpVersion) {
 		this.httpVersion = httpVersion;
 	}
-
+	
+	/**
+	 * Shows the request-line according to RFC 2616
+	 * (@url http://www.w3.org/Protocols/rfc2616/rfc2616-sec5.html#sec5.1)
+	 */
 	@Override
 	public String toString() {
-		return getMethod() + " " + getRequestUri() + " " + getHttpVersion();
+		return getMethod() + " " + getRequestUri() + " " + getHttpVersion() + "\r\n";
 	}
 }
