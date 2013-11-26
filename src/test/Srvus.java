@@ -6,6 +6,7 @@ import java.util.Date;
 
 import messages.Request;
 import messages.Response;
+import util.FileManager;
 import enums.EStatusCode;
 import exception.HttpException;
 
@@ -33,12 +34,15 @@ public class Srvus implements Runnable {
 			System.out.println(req.getBody()); // message body
 			System.out.println("-----");
 			
+			// process file request
+			FileManager fman = new FileManager(req);
+			String content = fman.getFileContent();
 			
 			// send response
 			Response out = new Response(so.getOutputStream());
 			out.setStatusCode(EStatusCode.C_200);
 			out.addHeaderField("Content-type", "text/html");
-			out.setBody(Content.get());
+			out.setBody(content);
 			out.send();
 			
 			// close input and output
