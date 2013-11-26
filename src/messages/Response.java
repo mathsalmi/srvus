@@ -34,14 +34,22 @@ public class Response {
 	 * Adds the code to the status-line
 	 * @param statuscode
 	 */
-	public void setStatusLine(EStatusCode statuscode) {
+	public void setStatusCode(EStatusCode statuscode) {
 		if(statuscode == null) {
 			throw new IllegalArgumentException("Status code cannot be null.");
 		}
 		statusLine.setHttpVersion(HttpUtil.currentVersion());
 		statusLine.setStatusCode(statuscode);
 	}
-
+	
+	/**
+	 * Returns the header fields
+	 * @return
+	 */
+	public ResponseFields getHeader() {
+		return this.responseFields;
+	}
+	
 	/**
 	 * Adds an element to the header
 	 * @param name
@@ -52,10 +60,10 @@ public class Response {
 	}
 	
 	/**
-	 * Deletes an element from the header
+	 * Removes an element from the header
 	 * @param name
 	 */
-	public void deleteHeaderField(String name) {
+	public void removeHeaderField(String name) {
 		this.responseFields.remove(name);
 	}
 
