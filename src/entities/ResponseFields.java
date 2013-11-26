@@ -5,5 +5,14 @@ package entities;
  * @author Matheus Salmi
  */
 public class ResponseFields extends HeaderFields {
-	private static final long serialVersionUID = 8294679085826398734L;
+
+	@Override
+	public String remove(String key) {
+		return super.remove(key);
+	}
+	
+	@Override
+	public void clear() {
+		super.clear();
+	}
 }
