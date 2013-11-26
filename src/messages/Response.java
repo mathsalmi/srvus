@@ -23,7 +23,7 @@ public class Response {
 	}
 	
 	/**
-	 * Return status-line
+	 * Returns the status-line
 	 * @return the statusLine
 	 */
 	public StatusLine getStatusLine() {
@@ -68,7 +68,7 @@ public class Response {
 	}
 
 	/**
-	 * Return body
+	 * Returns body
 	 * @return the body
 	 */
 	public String getBody() {
@@ -76,7 +76,7 @@ public class Response {
 	}
 
 	/**
-	 * Set body
+	 * Sets body
 	 * @param body the body to set
 	 */
 	public void setBody(String body) {
@@ -84,7 +84,7 @@ public class Response {
 	}
 	
 	/**
-	 * Send the response
+	 * Sends the response
 	 */
 	public void send() {
 		PrintWriter out = new PrintWriter(this.outstream);
