@@ -75,7 +75,7 @@ public enum EStatusCode {
 	
 	// methods
 	/**
-	 * Find the status code given its code
+	 * Finds the status code given its code
 	 * @param code
 	 * @return
 	 */
@@ -90,7 +90,7 @@ public enum EStatusCode {
 	}
 	
 	/**
-	 * Find the status code given its description (reason-phrase)
+	 * Finds the status code given its description (reason-phrase)
 	 * @param desc
 	 * @return
 	 */
