@@ -1,6 +1,7 @@
 package messages;
 
 import java.io.OutputStream;
+import java.io.PrintWriter;
 
 import util.HttpUtil;
 import entities.ResponseFields;
@@ -78,5 +79,16 @@ public class Response {
 	 */
 	public void setBody(String body) {
 		this.body = body;
+	}
+	
+	/**
+	 * Send the response
+	 */
+	public void send() {
+		PrintWriter out = new PrintWriter(this.outstream);
+		out.write(getStatusLine().toString());
+		out.write(this.responseFields.toString() + "\r\n");
+		out.write(getBody());
+		out.flush();
 	}
 }
