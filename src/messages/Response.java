@@ -14,17 +14,11 @@ import enums.EStatusCode;
  */
 public class Response {
 	private OutputStream outstream = null;
-	private StatusLine statusLine = null;
-	private ResponseFields responseFields = null;
+	private final StatusLine statusLine = new StatusLine();
+	private final ResponseFields responseFields = new ResponseFields();
 	private String body = null;
 	
-	private Response() {
-		this.statusLine = new StatusLine();
-		this.responseFields = new ResponseFields();
-	}
-	
 	public Response(OutputStream outstream) {
-		this();
 		this.outstream = outstream;
 	}
 	

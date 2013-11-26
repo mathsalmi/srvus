@@ -21,15 +21,10 @@ import exception.HttpException;
 public class Request {
 	private InputStream inputstream = null;
 	private RequestLine requestLine = null;
-	private RequestFields requestFields = null;
+	private final RequestFields requestFields = new RequestFields();
 	private String body = null;
 	
-	private Request() {
-		this.requestFields = new RequestFields();
-	}
-	
 	public Request(InputStream inputstream) throws HttpException {
-		this();
 		this.inputstream = inputstream;
 		this.process();
 	}
