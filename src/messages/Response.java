@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import util.HttpUtil;
+import util.MIMEUtil;
 import entities.ResponseFields;
 import entities.StatusLine;
 import enums.EStatusCode;
@@ -79,7 +80,7 @@ public class Response {
 	}
 
 	/**
-	 * Sets body
+	 * Sets body and some body-related header fields
 	 * @param body the body to set
 	 */
 	public void setBody(byte[] body) {
@@ -88,18 +89,19 @@ public class Response {
 		// set length
 		if(body != null) {
 			this.addHeaderField("content-length", String.valueOf(body.length));
+			
+			// if content-type is still unknown, use default
+			if(this.getHeader().get("content-type") == null) {
+				this.addHeaderField("content-type", "application/octet-stream");
+			}
 		} else {
 			this.removeHeaderField("content-length");
-		}
-		
-		// if content-type still is unknown, use default
-		if(this.getHeader().get("content-type") == null) {
-			this.addHeaderField("content-type", "application/octet-stream");
+			this.removeHeaderField("content-type");
 		}
 	}	
 	
 	/**
-	 * Sets body
+	 * Sets body and some body-related header fields
 	 * @param body the body to set
 	 */
 	public void setBody(String body) {
@@ -107,14 +109,14 @@ public class Response {
 	}
 	
 	/**
-	 * Sets body
+	 * Sets body and some body-related header fields
 	 * @param body the body to set
 	 */
 	public void setBody(Path body) throws HttpException {
 		try {
 			setBody(Files.readAllBytes(body));
 			
-			String type = Files.probeContentType(body); // FIXME: create util method because this method is buggy on osx
+			String type = MIMEUtil.findType(body);
 			if(type != null) {
 				this.addHeaderField("content-type", type);
 			}
