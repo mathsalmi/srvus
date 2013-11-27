@@ -13,8 +13,6 @@ import exception.HttpException;
 public class FileManager {
 	// TODO: read directories, paths and some behaviors from config files instead
 	private Request request = null;
-	private static final String ROOT_DIR = System.getProperty("user.dir");
-	private static final String SITES_DIR = ROOT_DIR + "/sites";
 	
 	public FileManager(Request request) {
 		if(request == null) {
@@ -30,7 +28,7 @@ public class FileManager {
 	 * @throws HttpException
 	 */
 	public Path getFilePath() throws HttpException {
-		String path = SITES_DIR + request.getRequestLine().getRequestUri();
+		String path = DirUtil.SITES_DIR + request.getRequestLine().getRequestUri();
 		return Paths.get(path);
 	}
 }
