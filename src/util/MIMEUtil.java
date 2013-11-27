@@ -48,7 +48,7 @@ public class MIMEUtil {
 		if(lines != null) {
 			for(String line : lines) {
 				// comments
-				if(line.startsWith("#")) {
+				if(line.isEmpty() || line.startsWith("#")) {
 					continue;
 				}
 				
