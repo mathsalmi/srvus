@@ -1,7 +1,7 @@
 package test;
 
-import java.io.InputStream;
 import java.net.Socket;
+import java.nio.file.Path;
 import java.util.Date;
 
 import messages.Request;
@@ -26,8 +26,7 @@ public class Srvus implements Runnable {
 			System.out.println(new Date());
 			System.out.println("-----");
 			
-			InputStream inputstream = so.getInputStream();
-			Request req = new Request(inputstream);
+			Request req = new Request(so.getInputStream());
 			System.out.print(req.getRequestLine()); // start line
 			System.out.print(req.getRequestFields()); // header
 			System.out.println("-----");
@@ -36,13 +35,12 @@ public class Srvus implements Runnable {
 			
 			// process file request
 			FileManager fman = new FileManager(req);
-			String content = fman.getFileContent();
+			Path rfile = fman.getFilePath();
 			
 			// send response
 			Response out = new Response(so.getOutputStream());
 			out.setStatusCode(EStatusCode.C_200);
-			out.addHeaderField("Content-type", "text/html");
-			out.setBody(content);
+			out.setBody(rfile);
 			out.send();
 			
 			// close input and output
