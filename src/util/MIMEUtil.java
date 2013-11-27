@@ -54,19 +54,20 @@ public class MIMEUtil {
 				
 				// find extension and type
 				Matcher m = pattern.matcher(line);
-				m.matches();
-				String key = m.group(2);
-				String value = m.group(1);
-				
-				// add to map
-				if(key.contains(" ")) {
-					// there may be more than one extension in one line
-					String[] keys = key.split(" ");
-					for(String item : keys) {
-						addToMap(item, value);
+				if(m.matches()) {
+					String key = m.group(2);
+					String value = m.group(1);
+					
+					// add to map
+					if(key.contains(" ")) {
+						// there may be more than one extension in one line
+						String[] keys = key.split(" ");
+						for(String item : keys) {
+							addToMap(item, value);
+						}
+					} else {
+						addToMap(key, value);
 					}
-				} else {
-					addToMap(key, value);
 				}
 			}
 		}
