@@ -70,6 +70,7 @@ public class Request {
 	 * @throws IOException
 	 */
 	private void processBody(BufferedReader in) throws IOException {
+		// FIXME: follow RFC 2616 rules and use byte[] instead of string or char[]
 		int contentLength = IntegerUtil.tryParse(this.requestFields.get("Content-Length"));
 		
 		StringBuilder body = new StringBuilder();

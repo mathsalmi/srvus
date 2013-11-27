@@ -1,25 +1,28 @@
 package messages;
 
+import java.io.IOException;
 import java.io.OutputStream;
-import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import util.HttpUtil;
 import entities.ResponseFields;
 import entities.StatusLine;
 import enums.EStatusCode;
+import exception.HttpException;
 
 /**
  * Represents an HTTP response.
  * @author Matheus Salmi
  */
 public class Response {
-	private OutputStream outstream = null;
+	private OutputStream out = null;
 	private final StatusLine statusLine = new StatusLine();
 	private final ResponseFields responseFields = new ResponseFields();
-	private String body = null;
+	private byte[] body = null;
 	
 	public Response(OutputStream outstream) {
-		this.outstream = outstream;
+		this.out = outstream;
 	}
 	
 	/**
@@ -71,7 +74,7 @@ public class Response {
 	 * Returns body
 	 * @return the body
 	 */
-	public String getBody() {
+	public byte[] getBody() {
 		return body;
 	}
 
@@ -79,17 +82,58 @@ public class Response {
 	 * Sets body
 	 * @param body the body to set
 	 */
-	public void setBody(String body) {
+	public void setBody(byte[] body) {
 		this.body = body;
+		
+		// set length
+		if(body != null) {
+			this.addHeaderField("content-length", String.valueOf(body.length));
+		} else {
+			this.removeHeaderField("content-length");
+		}
+		
+		// if content-type still is unknown, use default
+		if(this.getHeader().get("content-type") == null) {
+			this.addHeaderField("content-type", "application/octet-stream");
+		}
+	}	
+	
+	/**
+	 * Sets body
+	 * @param body the body to set
+	 */
+	public void setBody(String body) {
+		setBody(body.getBytes());
+	}
+	
+	/**
+	 * Sets body
+	 * @param body the body to set
+	 */
+	public void setBody(Path body) throws HttpException {
+		try {
+			setBody(Files.readAllBytes(body));
+			
+			String type = Files.probeContentType(body);
+			if(type != null) {
+				this.addHeaderField("content-type", type);
+			}
+		} catch (IOException | SecurityException e) {
+			throw new HttpException(EStatusCode.C_404);
+		} catch(OutOfMemoryError e) {
+			throw new HttpException(EStatusCode.C_413);
+		} catch(Exception e) {
+			throw new HttpException(EStatusCode.C_500);
+		}
 	}
 	
 	/**
 	 * Sends the response
+	 * @throws IOException 
 	 */
-	public void send() {
-		PrintWriter out = new PrintWriter(this.outstream);
-		out.write(getStatusLine().toString());
-		out.write(this.responseFields.toString() + "\r\n");
+	public void send() throws IOException {
+		out.write(getStatusLine().toString().getBytes());
+		out.write((this.responseFields.toString() + "\r\n").getBytes());
 		out.write(getBody());
 		out.flush();
 	}
