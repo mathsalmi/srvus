@@ -114,7 +114,7 @@ public class Response {
 		try {
 			setBody(Files.readAllBytes(body));
 			
-			String type = Files.probeContentType(body);
+			String type = Files.probeContentType(body); // FIXME: create util method because this method is buggy on osx
 			if(type != null) {
 				this.addHeaderField("content-type", type);
 			}
