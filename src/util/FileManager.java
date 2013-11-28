@@ -11,7 +11,6 @@ import exception.HttpException;
  * @author Matheus Salmi
  */
 public class FileManager {
-	// TODO: read directories, paths and some behaviors from config files instead
 	private Request request = null;
 	
 	public FileManager(Request request) {
@@ -27,8 +26,8 @@ public class FileManager {
 	 * @return
 	 * @throws HttpException
 	 */
-	public Path getFilePath() throws HttpException {
-		String path = DirUtil.SITES_DIR + request.getRequestLine().getRequestUri();
+	public Path getFilePath() {
+		String path = PathUtil.SITES_DIR + request.getRequestLine().getRequestUri();
 		return Paths.get(path);
 	}
 }
