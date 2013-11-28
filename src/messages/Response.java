@@ -5,8 +5,8 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import util.FileUtil;
 import util.HttpUtil;
-import util.MIMEUtil;
 import entities.ResponseFields;
 import entities.StatusLine;
 import enums.EStatusCode;
@@ -116,7 +116,7 @@ public class Response {
 		try {
 			setBody(Files.readAllBytes(body));
 			
-			String type = MIMEUtil.findType(body);
+			String type = FileUtil.getMimeType(body);
 			if(type != null) {
 				this.addHeaderField("content-type", type);
 			}
