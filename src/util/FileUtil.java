@@ -31,4 +31,13 @@ public class FileUtil {
 	public static String getExt(Path path) {
 		return getExt(path.toString());
 	}
+	
+	/**
+	 * Returns file MIME type given its path
+	 * @param path
+	 * @return
+	 */
+	public static String getMimeType(Path path) {
+		return MIMEUtil.findType(path);
+	}
 }
