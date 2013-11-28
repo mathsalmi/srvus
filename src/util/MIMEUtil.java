@@ -30,7 +30,7 @@ public class MIMEUtil {
 	private static List<String> loadFile() {
 		List<String> out = null;
 		try {
-			out = Files.readAllLines(Paths.get(DirUtil.ETC_DIR + "/mime.types"), StandardCharsets.UTF_8);
+			out = Files.readAllLines(Paths.get(PathUtil.ETC_DIR + "/mime.types"), StandardCharsets.UTF_8);
 		} catch(Exception e) { }
 		
 		return out;
@@ -47,7 +47,7 @@ public class MIMEUtil {
 		List<String> lines = loadFile();
 		if(lines != null) {
 			for(String line : lines) {
-				// comments
+				// empty lines and comments
 				if(line.isEmpty() || line.startsWith("#")) {
 					continue;
 				}
@@ -79,7 +79,7 @@ public class MIMEUtil {
 	 * @param value
 	 */
 	private static void addToMap(String key, String value) {
-		if(key != null && value != null)
+		if(key != null && ! key.isEmpty() && value != null && ! key.isEmpty())
 			data.put(key, value);
 	}
 	
