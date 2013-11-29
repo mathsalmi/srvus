@@ -4,6 +4,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import messages.Request;
+import entities.RequestLine;
+import enums.EStatusCode;
 import exception.HttpException;
 
 /**
@@ -26,8 +28,13 @@ public class FileManager {
 	 * @return
 	 * @throws HttpException
 	 */
-	public Path getFilePath() {
-		String path = PathUtil.SITES_DIR + request.getRequestLine().getRequestUri();
+	public Path getFilePath() throws HttpException {
+		RequestLine rqLine = request.getRequestLine();
+		if(rqLine == null) {
+			throw new HttpException(EStatusCode.C_500);
+		}
+		
+		String path = PathUtil.SITES_DIR + rqLine.getRequestUri();
 		return Paths.get(path);
 	}
 }
