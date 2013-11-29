@@ -10,7 +10,7 @@ public class Test {
 		ServerSocket ss = null;
 		
 		try {
-			ss = new ServerSocket(8885);
+			ss = new ServerSocket(8885); // TODO: read port from args
 
 			while(true) {
 				Socket so = ss.accept();
