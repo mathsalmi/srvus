@@ -8,6 +8,7 @@ import java.net.URI;
 
 import util.HttpUtil;
 import util.IntegerUtil;
+import util.ServerConfig;
 import entities.RequestFields;
 import entities.RequestLine;
 import enums.EMethod;
@@ -121,9 +122,9 @@ public class Request {
 		
 		// check HTTP version
 		String httpVersion = tokens[2];
-//		if( ! HttpUtil.isSupported(httpVersion)) {
-//			throw new HttpException(EStatusCode.C_505);
-//		}
+		if(ServerConfig.get("server.checkHTTPVersion").equals("yes") && ! HttpUtil.isSupported(httpVersion)) {
+			throw new HttpException(EStatusCode.C_505);
+		}
 		
 		RequestLine output = new RequestLine();
 		output.setMethod(method);
