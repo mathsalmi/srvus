@@ -46,6 +46,7 @@ public class Srvus implements Runnable {
 			// close input and output
 			so.close();
 		} catch(HttpException e) {
+			e.printStackTrace();
 			this.respondWithError(e);
 		} catch(Exception e) {
 			e.printStackTrace();
