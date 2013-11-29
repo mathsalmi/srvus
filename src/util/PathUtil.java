@@ -10,7 +10,7 @@ public class PathUtil {
 	// TODO: add to config: 1) log; 2) errors; 3) sites folder;
 	// directories
 	public static final String ROOT_DIR = getRoot();
-	public static final String SITES_DIR = ROOT_DIR + "/" + ServerConfig.get("sites.dirname");
+	public static final String SITES_DIR = ROOT_DIR + "/sites";
 	public static final String ETC_DIR = ROOT_DIR + "/etc";
 	
 	// files
@@ -24,7 +24,12 @@ public class PathUtil {
 	private static String getRoot() {
 		String filename = PathUtil.class.getName().replace('.', '/') + ".class";
 		URL classUrl = PathUtil.class.getClassLoader().getResource(filename);
+		String out = classUrl.getPath().replaceFirst("/bin/" + filename, "");
+		// remove trailing slash
+		if(out.indexOf(':') != -1) {
+			out = out.replaceFirst("/", "");
+		}
 		
-		return classUrl.getPath().replaceFirst("/", "").replaceFirst("/bin/" + filename, "");
+		return out;
 	}
 }
