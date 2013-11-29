@@ -4,13 +4,18 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import util.CloseableUtil;
+import util.IntegerUtil;
+import util.ServerConfig;
+
 public class Test {
 
 	public static void main(String[] args) throws IOException {
 		ServerSocket ss = null;
 		
 		try {
-			ss = new ServerSocket(8885);
+			ServerConfig.load();
+			ss = new ServerSocket(IntegerUtil.tryParse(ServerConfig.get("server.port")));
 
 			while(true) {
 				Socket so = ss.accept();
@@ -19,7 +24,7 @@ public class Test {
 				t.start();
 			}
 		} finally {
-			ss.close();
+			CloseableUtil.tryClose(ss);
 		}
 	}
 }
