@@ -7,6 +7,7 @@ import java.nio.file.Path;
 
 import util.FileUtil;
 import util.HttpUtil;
+import util.ServerConfig;
 import entities.ResponseFields;
 import entities.StatusLine;
 import enums.EStatusCode;
@@ -92,7 +93,7 @@ public class Response {
 			
 			// if content-type is still unknown, use default
 			if(this.getHeader().get("content-type") == null) {
-				this.addHeaderField("content-type", "application/octet-stream");
+				this.addHeaderField("content-type", ServerConfig.get("sites.defaultContentType"));
 			}
 		} else {
 			this.removeHeaderField("content-length");
