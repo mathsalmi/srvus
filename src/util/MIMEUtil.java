@@ -30,7 +30,7 @@ public class MIMEUtil {
 	private static List<String> loadFile() {
 		List<String> out = null;
 		try {
-			out = Files.readAllLines(Paths.get(PathUtil.ETC_DIR + "/mime.types"), StandardCharsets.UTF_8);
+			out = Files.readAllLines(Paths.get(PathUtil.MIME_FILE), StandardCharsets.UTF_8);
 		} catch(Exception e) { }
 		
 		return out;
