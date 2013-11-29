@@ -21,8 +21,8 @@ public class ServerConfig {
 	/**
 	 * Load configuration from file
 	 */
-	public static void load() throws ServerConfigException {
-		if( data.isEmpty()) {
+	private static void load() throws ServerConfigException {
+		if(data.isEmpty()) {
 			try {
 				data.load(new FileInputStream(new File(PathUtil.SRVUS_CONFIG)));
 			} catch (FileNotFoundException e) {
@@ -39,6 +39,12 @@ public class ServerConfig {
 	 * @return
 	 */
 	public static String get(String name) {
-		return data.getProperty(name);
+		load();
+		
+		String out = data.getProperty(name);
+		if(out == null)
+			out = "";
+		
+		return out;
 	}
 }
